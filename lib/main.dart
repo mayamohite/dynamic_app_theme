@@ -18,13 +18,10 @@ void main() {
               theme == "" ||
               theme == Constants.SYSTEM_DEFAULT) {
             value.setString(Constants.APP_THEME, Constants.SYSTEM_DEFAULT);
-            return ThemeNotifier(
-              ThemeMode.system,
-            );
+            return ThemeNotifier(ThemeMode.system);
           }
           return ThemeNotifier(
-            theme == Constants.DARK ? ThemeMode.dark : ThemeMode.light,
-          );
+              theme == Constants.DARK ? ThemeMode.dark : ThemeMode.light);
         },
         child: MyApp(),
       ),
@@ -38,12 +35,11 @@ class MyApp extends StatelessWidget {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Dynamic theme Demo',
       theme: AppTheme().lightTheme,
       darkTheme: AppTheme().darkTheme,
       themeMode: themeNotifier.getThemeMode(),
-      home: MyHomePage(title: Constants.HOME),
+      home:  MyHomePage(),
     );
   }
 }
-
