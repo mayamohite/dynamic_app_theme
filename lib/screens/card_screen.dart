@@ -1,6 +1,7 @@
 import 'package:dynamic_app_theme/util/app_color.dart';
 import 'package:dynamic_app_theme/util/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CardWidgetScreen extends StatefulWidget {
   @override
@@ -9,6 +10,22 @@ class CardWidgetScreen extends StatefulWidget {
 
 class _CardWidgetScreenState extends State<CardWidgetScreen> {
   var isDarkTheme;
+  SharedPreferences prefs;
+  String selectedTheme = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _getSavedTheme();
+  }
+
+  _getSavedTheme() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedTheme =
+          prefs.getString(Constants.APP_THEME) ?? Constants.SYSTEM_DEFAULT;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,21 +69,15 @@ class _CardWidgetScreenState extends State<CardWidgetScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    isDarkTheme
-                        ? Constants.darkThemeHeader
-                        : Constants.lightThemeHeader,
+                    Constants.selectedThemeHeader + selectedTheme,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                 /* Container(
-                    height: 200,
-                    width: 200,
-                    child: FlareActor('assets/swipeleft.flr',
-                        alignment: Alignment.center,
-                        animation: "Swipe_left_light"),
-                  ),*/
+                  Container(
+                    child: Image.asset("assets/banner-img.png"),
+                  ),
                 ],
               ),
             ),
