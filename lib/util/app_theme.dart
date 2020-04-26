@@ -19,7 +19,7 @@ class AppTheme {
   get lightTheme => ThemeData(
         primarySwatch: Colors.grey,
         appBarTheme:
-            AppBarTheme(brightness: Brightness.light, color: AppColors.grey2),
+            AppBarTheme(brightness: Brightness.light, color: AppColors.grey2,),
         inputDecorationTheme: InputDecorationTheme(
           hintStyle: TextStyle(color: AppColors.textGrey),
           labelStyle: TextStyle(color: AppColors.white),

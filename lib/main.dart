@@ -1,12 +1,14 @@
+import 'package:dynamic_app_theme/anim_controller.dart';
 import 'package:dynamic_app_theme/provider/theme_provider.dart';
 import 'package:dynamic_app_theme/screens/home_page.dart';
 import 'package:dynamic_app_theme/util/app_constants.dart';
 import 'package:dynamic_app_theme/util/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+/*void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   prefs.then((value) {
@@ -30,11 +32,27 @@ void main() {
       ),
     );
   });
+}*/
+
+void main() {
+  runApp(
+    ChangeNotifierProvider<ThemeNotifier>(
+      create: (BuildContext context) {
+        return ThemeNotifier(
+          ThemeMode.light,
+        );
+      },
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+/*class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
+    ));
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -42,7 +60,23 @@ class MyApp extends StatelessWidget {
       theme: AppTheme().lightTheme,
       darkTheme: AppTheme().darkTheme,
       themeMode: themeNotifier.getThemeMode(),
-      home: MyHomePage(title: Constants.HOME),
+      home: ChangeNotifierProvider<PagerIndicatorAnimController>(
+        create: (context) => PagerIndicatorAnimController(),
+        child: MyHomePage(),
+      ),
+    );
+  }*/
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Theme Demo',
+      theme: AppTheme().lightTheme,
+      darkTheme: AppTheme().darkTheme,
+      themeMode: themeNotifier.getThemeMode(),
+      home:  MyHomePage(),
     );
   }
 }

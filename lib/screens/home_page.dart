@@ -1,70 +1,117 @@
-
-import 'package:dynamic_app_theme/screens/seeting_screen.dart';
+import 'package:dynamic_app_theme/anim_controller.dart';
+import 'package:dynamic_app_theme/provider/theme_provider.dart';
+import 'package:dynamic_app_theme/screens/card_screen.dart';
+import 'package:dynamic_app_theme/util/app_constants.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  PageController controller;
+  int _selectedPage = 0;
+  int _previousPage = 0;
+  PagerIndicatorAnimController _provider;
+  ThemeNotifier _themeNotifier;
+  var _isDarkMode;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    controller = PageController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    _provider = Provider.of<PagerIndicatorAnimController>(context);
+    _isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    _themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: settings(),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).accentIconTheme.color,
-        ),
+      body: Stack(
+        children: <Widget>[
+          _backgroundAnimWidget(),
+          _pagerWidget(),
+        ],
       ),
     );
   }
 
-  settings() {
-    return <Widget>[
-      IconButton(
-          icon: Icon(
-            Icons.settings,
-            color: Theme.of(context).accentIconTheme.color,
+  _backgroundAnimWidget() {
+    return Center(
+      child: FlareActor(Constants.background_anim,
+          alignment: Alignment.center,
+          fit: BoxFit.fill,
+          animation: _isDarkMode
+              ? Constants.night_animation
+              : Constants.day_animation),
+    );
+  }
+
+  _pagerWidget() {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            height: 200,
+            child: PageView.builder(
+              itemBuilder: (context, position) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    top: 50,
+                    left: 30,
+                    right: 30,
+                  ),
+                  child: CardWidgetScreen(
+                    position: position,
+                  ),
+                );
+              },
+              onPageChanged: (position) {
+                setState(() {
+                  _previousPage = _selectedPage;
+                  _selectedPage = position;
+                });
+                _provider.setAnimState(_previousPage, _selectedPage);
+                _setTheme(position);
+              },
+              itemCount: 3,
+            ),
           ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SettingScreen()),
-            );
-          }),
-    ];
+        ),
+        Container(
+          width: 80,
+          height: 50,
+          child: FlareActor(
+            Constants.pager_indicator_anim,
+            alignment: Alignment.center,
+            animation: _provider.animationState,
+          ),
+        ),
+        SizedBox(
+          height: 100,
+        ),
+      ],
+    );
+  }
+
+  _setTheme(int position) {
+    if (position == 0) {
+      _themeNotifier.setThemeMode(ThemeMode.light);
+    } else if (position == 1) {
+      _themeNotifier.setThemeMode(ThemeMode.dark);
+    } else {
+      _themeNotifier.setThemeMode(ThemeMode.system);
+    }
   }
 }

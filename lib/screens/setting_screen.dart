@@ -3,7 +3,7 @@ import 'package:dynamic_app_theme/util/app_color.dart';
 import 'package:dynamic_app_theme/util/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _SettingState extends State<SettingScreen> {
   int _selectedPosition = 0;
   var isDarkTheme;
   List themes = Constants.themes;
-  SharedPreferences prefs;
+//  SharedPreferences prefs;
   ThemeNotifier themeNotifier;
 
   @override
@@ -27,11 +27,11 @@ class _SettingState extends State<SettingScreen> {
   }
 
   _getSavedTheme() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _selectedPosition = themes.indexOf(
-          prefs.getString(Constants.APP_THEME) ?? Constants.SYSTEM_DEFAULT);
-    });
+//    prefs = await SharedPreferences.getInstance();
+//    setState(() {
+//      _selectedPosition = themes.indexOf(
+//          prefs.getString(Constants.APP_THEME) ?? Constants.SYSTEM_DEFAULT);
+//    });
   }
 
   @override
@@ -87,7 +87,7 @@ class _SettingState extends State<SettingScreen> {
   }
 
   void onThemeChanged(String value) async {
-    var prefs = await SharedPreferences.getInstance();
+    /*var prefs = await SharedPreferences.getInstance();
     if (value == Constants.SYSTEM_DEFAULT) {
       var brightness = MediaQuery.of(context).platformBrightness;
       prefs.setString(Constants.APP_THEME, value);
@@ -98,6 +98,6 @@ class _SettingState extends State<SettingScreen> {
     } else {
       prefs.setString(Constants.APP_THEME, value);
       themeNotifier.setThemeMode(ThemeMode.light);
-    }
+    }*/
   }
 }
