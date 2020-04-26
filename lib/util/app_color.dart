@@ -14,4 +14,12 @@ class AppColors {
   static const lightPink = Color(0xFFFf7597);
   static const darkPink = Color(0xFFFf0266);
   static const grey2 = Color(0xFFEEEEEE);
+  static const yellow = Color(0xFFFFFCB6);
+  static const blue = Color(0xFFB4FFED);
+  static const dark_card_bg = Color(0xFF5F79B9);
+  static const dark_card_forground = Color(0xFF042B3D);
+  static const purple = Color(0xFF411846);
+  static const lightThemeShadowColor = Color(0xFF000014);
+  static const darkThemeShadowColor = Color(0xFF1E2247);
+
 }

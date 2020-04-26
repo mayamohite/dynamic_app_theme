@@ -20,7 +20,6 @@ class _SettingState extends State<SettingScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getSavedTheme();
     });
@@ -38,7 +37,6 @@ class _SettingState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     themeNotifier = Provider.of<ThemeNotifier>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(Constants.SETTING),
@@ -89,15 +87,12 @@ class _SettingState extends State<SettingScreen> {
   void onThemeChanged(String value) async {
     var prefs = await SharedPreferences.getInstance();
     if (value == Constants.SYSTEM_DEFAULT) {
-      var brightness = MediaQuery.of(context).platformBrightness;
-      prefs.setString(Constants.APP_THEME, value);
       themeNotifier.setThemeMode(ThemeMode.system);
     } else if (value == Constants.DARK) {
-      prefs.setString(Constants.APP_THEME, value);
       themeNotifier.setThemeMode(ThemeMode.dark);
     } else {
-      prefs.setString(Constants.APP_THEME, value);
       themeNotifier.setThemeMode(ThemeMode.light);
     }
+    prefs.setString(Constants.APP_THEME, value);
   }
 }

@@ -1,4 +1,7 @@
-import 'package:dynamic_app_theme/screens/seeting_screen.dart';
+import 'package:dynamic_app_theme/screens/card_screen.dart';
+import 'package:dynamic_app_theme/screens/setting_screen.dart';
+import 'package:dynamic_app_theme/util/app_constants.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -7,49 +10,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  var _isDarkMode;
 
   @override
   Widget build(BuildContext context) {
+    _isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home "),
-        actions: settings(),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).accentIconTheme.color,
-        ),
+      body: Stack(
+        children: <Widget>[
+          _backgroundAnimWidget(),
+          _cardWidget(),
+          _settings(),
+        ],
       ),
     );
   }
 
-  settings() {
-    return <Widget>[
-      IconButton(
+  _backgroundAnimWidget() {
+    return Center(
+      child: FlareActor(Constants.background_anim,
+          alignment: Alignment.center,
+          fit: BoxFit.fill,
+          animation: _isDarkMode
+              ? Constants.night_animation
+              : Constants.day_animation),
+    );
+  }
+
+  _cardWidget() {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(top: 70, left: 30, right: 30),
+            child: CardWidgetScreen(),
+          ),
+        ),
+        SizedBox(
+          height: 150,
+        ),
+      ],
+    );
+  }
+
+  _settings() {
+    return Padding(
+      padding: EdgeInsets.only(top: 20.0),
+      child: Align(
+        alignment: Alignment.topRight,
+        child: IconButton(
           icon: Icon(
             Icons.settings,
             color: Theme.of(context).accentIconTheme.color,
@@ -59,7 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
               context,
               MaterialPageRoute(builder: (context) => SettingScreen()),
             );
-          }),
-    ];
+          },
+        ),
+      ),
+    );
   }
 }

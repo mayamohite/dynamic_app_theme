@@ -3,6 +3,7 @@ import 'package:dynamic_app_theme/screens/home_page.dart';
 import 'package:dynamic_app_theme/util/app_constants.dart';
 import 'package:dynamic_app_theme/util/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,14 +33,17 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
+    ));
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Dynamic theme Demo',
+      title: 'Theme Demo',
       theme: AppTheme().lightTheme,
       darkTheme: AppTheme().darkTheme,
       themeMode: themeNotifier.getThemeMode(),
-      home:  MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
